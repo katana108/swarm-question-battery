@@ -3,11 +3,24 @@
 Usage: python src/assemble_prompt.py data/village/pilot_in/p00.txt > prompt_p00.txt
 Paste the output into any model (or send it through an API), save the JSON reply as pNN.json.
 """
+import hashlib
 import re
 import sys
 from pathlib import Path
 
-BATTERY = Path(__file__).parent.parent / "battery"
+import yaml
+
+ROOT = Path(__file__).parent.parent
+BATTERY = ROOT / "battery"
+
+
+def check_frozen(config_path=ROOT / "config.yaml"):
+    """Refuse to run if a battery file differs from the frozen hashes in config.yaml."""
+    frozen = yaml.safe_load(Path(config_path).read_text())["battery_sha256"]
+    for name, expected in frozen.items():
+        actual = hashlib.sha256((BATTERY / name).read_bytes()).hexdigest()
+        if actual != expected:
+            raise RuntimeError(f"battery/{name} changed since the freeze; results would not be comparable")
 
 
 def instructions():
@@ -29,4 +42,5 @@ def assemble(chunk_text):
 
 
 if __name__ == "__main__":
+    check_frozen()
     print(assemble(Path(sys.argv[1]).read_text()))

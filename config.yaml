@@ -1,0 +1,20 @@
+# Frozen configuration for the main runs. Do not edit battery/ files after freezing:
+# assemble_prompt.py refuses to build prompts if these hashes no longer match.
+battery_version: v0.5
+frozen_at: 2026-10-03
+frozen_commit: 1170f1a
+battery_sha256:
+  questions.md: 67b50617365e47b2e6e1b95e7cfd66bf95e604a896932273a35f4861844d3339
+  codebook.md: ab5c24e21eff8884dbc406928295d20ea18f0aeeec20b10015befbfcd237bfef
+  coder_prompt.md: 169aebaedcd34b96599388d955078a264b48ab917b934ea40b5cdf999b970f46
+
+models:
+  coder_a: claude-sonnet-5-5      # main run, same for everyone (handoff section 8)
+  coder_b: TBD                    # second vendor (GPT-class), 15% of chunks
+  pilot_coder: claude-opus-5-5    # used for the wiki, HF and Village pilots
+
+limits:
+  max_spend_usd_per_person: 50
+  chunk_max_chars: 24000
+  second_coder_share: 0.15
+  seed: 0
