@@ -8,7 +8,7 @@ Rules (battery/coder_prompt.md):
 """
 import json
 
-ABSENCE_CODES = {"none", "no", "no_objection", "never_mentioned", "none_stated", "unclear", "absent", "not_found", "not_observable", "unknown"}
+ABSENCE_CODES = {"none", "no", "no_objection", "never_mentioned", "none_stated", "unclear", "absent", "not_applicable", "not_found", "not_observable", "unknown"}
 
 
 def _is_absence(answer):

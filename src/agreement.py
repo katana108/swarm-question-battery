@@ -11,9 +11,9 @@ from pathlib import Path
 # (label, question, code field) for single-valued closed codes; chain steps are added below.
 FIELDS = [
     ("Q1 us", "Q1", "us"), ("Q1 humans", "Q1", "humans"), ("Q1 human_status", "Q1", "human_status"),
-    ("Q3 act", "Q3", "act"), ("Q3 act_type", "Q3", "act_type"), ("Q3 stage", "Q3", "misbehaviour_stage"),
-    ("Q5 outcome", "Q5", "outcome"), ("Q6 leader", "Q6", None), ("Q8", "Q8", None),
-    ("Q9 provided", "Q9", "provided"), ("Q9 behaviour", "Q9", "behaviour"), ("Q10", "Q10", None),
+    ("Q3 act", "Q3", "act"), ("Q3 act_types", "Q3", "act_types"), ("Q3 stage", "Q3", "misbehaviour_stage"),
+    ("Q5 outcome", "Q5", "outcome"), ("Q6 authority", "Q6", "authority"), ("Q8 response", "Q8", "response"),
+    ("Q9 provided", "Q9", "provided"), ("Q9 behaviour", "Q9", "behaviour"), ("Q10 pattern", "Q10", "pattern"),
 ]
 STEPS = ["notice", "judge", "own", "know_how", "act"]
 
@@ -38,6 +38,8 @@ def code_value(result, q, field):
     if not isinstance(code, dict):
         return str(code)
     value = code.get(field) if field else next(iter(code.values()), None)
+    if isinstance(value, list):
+        value = sorted(value, key=str)  # lists compare as sets of values
     return json.dumps(value, sort_keys=True) if isinstance(value, (list, dict)) else str(value)
 
 
