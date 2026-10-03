@@ -77,3 +77,8 @@ def test_empty_item_list_and_none_stated_are_absence():
     assert check_answer({"quotes": [], "code": {"items": []}, "observability": "public"}, CHUNK)[0] is True
     q9 = {"provided": "unknown", "behaviour": "never_mentioned", "why_not": "none_stated"}
     assert check_answer({"quotes": [], "code": q9, "observability": "public"}, CHUNK)[0] is True
+
+
+def test_human_and_system_quotes_are_valid_evidence():
+    ans = {"quotes": [{"text": "ask the admin first", "speaker_type": "human"}], "code": {}}
+    assert check_answer(ans, CHUNK) == (True, "ok")

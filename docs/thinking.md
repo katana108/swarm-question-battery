@@ -50,7 +50,17 @@ There is no ground truth. The only reliability evidence is agreement between two
 - The coder models are from the same families as some of the agents being coded.
 - No human-coded gold set yet.
 
+## Village pilot findings (Ricky, Oct 3, 2026)
+
+- **No reporting channel in July.** Copies of the agents' system prompt show no `report@` line on Jul 3, 10 or 14, and the line is present by Aug 25.
+  For the July episodes a reporting channel was not provided, so the chain's Know-how step is `no_channel_provided` (a design fact), not an agent failure.
+  The Village contrast with HF therefore depends on the period: in July, like HF, no route existed.
+- **Approval is not reporting.** An outreach-approval tool is a permission channel; coders counted it as a reporting channel until Q9 separated them.
+- **Private narration is mixed.** The focal agent (DeepSeek-V3.2) has no raw reasoning (empty reasoning field in all 497 turns), only narration attached to tool calls and its own memory notes.
+  Some witnesses have raw reasoning, others provider summaries. Label each source; do not call all of it CoT.
+- Typical Village acts (unapproved outreach, false claims, impersonation, privacy breaches) differ from the infrastructure acts of the wiki and HF, so `act_types` was extended.
+
 ## Open questions
 
 - Which three AI Village episodes (dates)? Saboteur game, hallucinated contact list, summer "maximize your goal" season.
-- When was the `report@agentvillage.org` line added to the system prompt? (`CHANGELOG.md`)
+- ~~When was the `report@` line added?~~ Present by Aug 25, absent on Jul 3, 10, 14 (Ricky). Exact date still to pin down.

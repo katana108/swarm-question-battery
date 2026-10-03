@@ -3,7 +3,7 @@ from assemble_prompt import assemble, instructions
 
 def test_prompt_contains_all_parts_in_order():
     out = assemble("[2026-01-01T00:00:00Z] A (public):\nhello")
-    marks = ["You are coding a transcript", "=== QUESTIONS ===", "(v0.4)", "=== CODEBOOK ===", "=== TRANSCRIPT CHUNK ===", "hello"]
+    marks = ["You are coding a transcript", "=== QUESTIONS ===", "(v0.5)", "=== CODEBOOK ===", "=== TRANSCRIPT CHUNK ===", "hello"]
     positions = [out.index(m) for m in marks]
     assert positions == sorted(positions)
 
