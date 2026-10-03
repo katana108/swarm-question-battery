@@ -9,10 +9,32 @@ from collections import Counter
 # From the handoff (section 6, step 3).
 HUMAN_WORDS = ["human", "operator", "admin", "moderator", "staff", "user", "email", "report", "help@"]
 
-# TODO(human): fill these three lists with the words you would look for.
-MORAL_WORDS = []  # words that label an act as wrong, e.g. "unethical"
-TECHNICAL_WORDS = []  # neutral or technical labels for the same act, e.g. "workaround"
-OBJECTION_WORDS = []  # words an agent uses to object to another agent, e.g. "stop"
+# Words match whole words, with an optional plural. A trailing * marks a stem ("deceiv*" matches "deceive", "deceived").
+# Built from the wiki data and the METR report. The wiki has almost no moral vocabulary (a finding in itself):
+# "wrong" there means an incorrect answer, so it is left out, and so are infrastructure words like cache, ping, proxy.
+
+# Labelling the act as wrong.
+MORAL_WORDS = [
+    "unethical", "immoral", "malicious", "illegal", "unauthorized", "unauthorised", "inappropriate",
+    "cheat*", "collu*", "unfair", "dishonest", "deceiv*", "deceptive", "fraud*", "abus*", "violat*",
+    "harmful", "forbidden", "prohibited", "not allowed", "not permitted", "against the rules",
+    "out of scope", "social engineering", "morally wrong", "ethic*", "misconduct",
+]
+
+# Neutral or technical labels for a rule-bending act. "relay" and "signal page" are how the wiki agents name
+# their answer-sharing across cohorts, so they stand in for the act here.
+TECHNICAL_WORDS = [
+    "relay", "signal page", "bypass", "workaround", "work around", "probe", "beacon", "exploit*", "hack*",
+    "trick", "shortcut", "loophole", "spoof*", "tamper*", "obfuscat*", "inject*", "payload", "mitm", "ssrf",
+    "circumvent*", "jailbreak*", "sandbox escape", "ahead cohort", "front-run*", "scrape", "scraping",
+]
+
+# One agent objecting to another's behaviour (not factual self-correction, so "correction" is left out).
+OBJECTION_WORDS = [
+    "do not", "please do not", "do not overwrite", "do not trust", "do not treat", "stop", "please stop",
+    "revert*", "undo", "undid", "rolled back", "rollback", "disagree*", "object to", "objection", "refuse*",
+    "warn*", "warning", "caution", "not ok", "not okay", "should not", "shouldn't", "must not", "vandal*",
+]
 
 CATEGORIES = {
     "human": HUMAN_WORDS,
@@ -25,7 +47,15 @@ CATEGORIES = {
 def _pattern(words):
     if not words:
         return None
-    return re.compile("|".join(re.escape(w) for w in words), re.IGNORECASE)
+    parts = []
+    for w in words:
+        if w.endswith("*"):
+            parts.append(r"\b" + re.escape(w[:-1]))  # stem: any ending
+        elif w[-1].isalnum():
+            parts.append(r"\b" + re.escape(w) + r"(?:s|es)?\b")  # whole word, optional plural
+        else:
+            parts.append(r"\b" + re.escape(w))  # ends in punctuation such as "help@"
+    return re.compile("|".join(parts), re.IGNORECASE)
 
 
 def count_hits(text, categories=None):
