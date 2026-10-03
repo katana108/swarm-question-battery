@@ -8,13 +8,15 @@ Rules (battery/coder_prompt.md):
 """
 import json
 
-ABSENCE_CODES = {"none", "no", "no_objection", "never_mentioned", "not_found", "not_observable", "unknown"}
+ABSENCE_CODES = {"none", "no", "no_objection", "never_mentioned", "none_stated", "unclear", "absent", "not_found", "not_observable", "unknown"}
 
 
 def _is_absence(answer):
     if answer.get("observability") == "not_observable" or answer.get("value") in ABSENCE_CODES:
         return True
     code = answer.get("code")
+    if isinstance(code, dict) and code.get("items") == []:  # Q2/Q4/Q7: nothing found
+        return True
     values = [v for v in (code.values() if isinstance(code, dict) else [code]) if isinstance(v, str)]
     if values and all(v in ABSENCE_CODES for v in values):  # every field must be an absence code
         return True
