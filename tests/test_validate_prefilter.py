@@ -60,3 +60,14 @@ def test_stem_marker_matches_any_ending():
 def test_objection_and_technical_lists_are_filled():
     assert count_hits("Please stop. Do not overwrite.")["objection"] == 2  # longest phrase wins, no double count
     assert count_hits("a workaround using a proxy bypass")["technical"] == 2
+
+
+def test_absence_codes_need_no_quote():
+    assert check_answer({"value": "none", "quotes": []}, CHUNK)[0] is True
+    assert check_answer({"quotes": [], "code": {"outcome": "no_objection"}, "observability": "public"}, CHUNK)[0] is True
+    assert check_answer({"value": "yes", "quotes": []}, CHUNK)[0] is False
+
+
+def test_mixed_absence_and_claim_still_needs_quote():
+    ans = {"quotes": [], "code": {"provided": "unknown", "behaviour": "used"}, "observability": "public"}
+    assert check_answer(ans, CHUNK)[0] is False
