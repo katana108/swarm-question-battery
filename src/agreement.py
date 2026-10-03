@@ -53,9 +53,9 @@ def labels(result):
 
 def main(dir_a, dir_b):
     pairs = []
-    for fa in sorted(dir_a.glob("p*.json")):
+    for fa in sorted(dir_a.glob("*.json")):
         fb = dir_b / fa.name
-        if fb.exists():
+        if fa.name != "coder_meta.json" and fb.exists():
             pairs.append((labels(json.loads(fa.read_text())), labels(json.loads(fb.read_text()))))
     print(f"{len(pairs)} chunks coded by both\n\n| field | agreement | kappa | flag |\n|---|---|---|---|")
     for field in pairs[0][0] if pairs else []:
@@ -64,7 +64,8 @@ def main(dir_a, dir_b):
         agree = sum(x == y for x, y in zip(a, b)) / len(a)
         k = cohen_kappa(a, b)
         flag = "UNRELIABLE" if k is not None and k < 0.6 else ""
-        print(f"| {field} | {agree:.0%} | {k:.2f} | {flag} |")
+        kappa = "n/a" if k is None else f"{k:.2f}"
+        print(f"| {field} | {agree:.0%} | {kappa} | {flag} |")
 
 
 if __name__ == "__main__":
