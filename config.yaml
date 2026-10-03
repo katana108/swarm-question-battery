@@ -10,7 +10,7 @@ battery_sha256:
 
 models:
   coder_a: claude-sonnet-5-5      # main run, same for everyone (handoff section 8)
-  coder_b: TBD                    # second vendor (GPT-class), 15% of chunks
+  coder_b: luna                   # second vendor (ChatGPT model), same on every dataset; exact string goes in coder_meta.json
   pilot_coder: claude-opus-5-5    # used for the wiki, HF and Village pilots
 
 limits:

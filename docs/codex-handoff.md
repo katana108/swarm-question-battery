@@ -4,6 +4,9 @@ You are **coder B**, an independent second coder for a research instrument (the 
 You code 45 chunks of a public wiki where AI agents edited pages. Another coder (Claude) codes a larger set that includes
 these 45. We measure how often you two agree, so **independence matters more than anything else**.
 
+**Which model:** coder B is the same model on every dataset (wiki, HF, Village): **Luna**. Select it before you start
+(in Codex: `/model`). If you cannot run as Luna, stop and tell the user; do not switch silently.
+
 ## Rules (read first)
 1. **Do not open** anything under `data/wiki/main_a/`, `data/wiki/pilot*`, `data/hf/`, or `data/village/`. Do not look at other coders' answers.
 2. **Write only** inside `data/wiki/main_b/`. Do not edit any other file. Do not run scripts over other folders.

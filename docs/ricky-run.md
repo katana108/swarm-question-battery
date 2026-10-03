@@ -15,7 +15,7 @@ No deadline: do it carefully, and write down anything odd.
 - `battery/codebook.md` and `battery/coder_prompt.md` are frozen too. `config.yaml` stores their SHA-256 hashes,
   and `src/assemble_prompt.py` refuses to run if any of them was edited.
 - If a rule looks wrong, **do not edit it**. Write the problem into `results/village/NOTES.md` (chunk id, rule). Anna decides after the run.
-- Coder A model: `claude-sonnet-5-5`, for everyone. Coder B (second vendor) codes a seeded 15% subset, see step 5.
+- Coder A model: `claude-sonnet-5-5`, for everyone. Coder B is **Luna** (ChatGPT, a different vendor) and codes a seeded 15% subset, see step 7.
 
 ## 1. Setup
     git clone https://github.com/katana108/swarm-question-battery   # or: git pull
@@ -114,7 +114,8 @@ re-code that chunk from scratch; do not edit the quote by hand. `review.py` prin
 read the shares of `not_found` / `not_observable` before moving on.
 
 ## 7. Second coder (different vendor)
-The second coder (Codex / GPT-class) codes only the ids in `second_coder_ids.json` and must not see coder A's answers.
+The second coder is **Luna** (a ChatGPT model), the same one that codes the wiki and HF second sets, so agreement is comparable across datasets.
+It codes only the ids in `second_coder_ids.json` and must not see coder A's answers.
 Give it `docs/codex-handoff-village.md` (written for this; it is the same as the wiki handoff with Village paths).
 It writes into `data/village/main_b/`. **Do not open `main_b` while coder A is still running**, and keep A and B separate.
 
