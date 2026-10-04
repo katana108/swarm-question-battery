@@ -60,7 +60,7 @@ def main(in_dir, out_dir):
         breaks[str(result.get("first_break"))] += 1
         rows.append((pid, meta["stratum"], len(meta["agents"]), result.get("first_break"), result.get("surprises", "")))
 
-    print("# Pilot review (collusion.wiki, 30 chunks)\n")
+    print(f"# Review: {out_dir} ({len(rows)} coded chunks)\n")
     print(f"Files with problems: {problems or 'none'}  ")
     print(f"Validation failures by reason: {dict(failures) or 'none'}\n")
     print("## Per question\n\n| Q | n | dropped | not_observable | main code distribution |\n|---|---|---|---|---|")

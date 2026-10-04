@@ -11,10 +11,12 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from agreement import FIELDS, STEPS, cohen_kappa, labels
+from sensitivity import expand, p1_check
 from validate import validate_result
 
 ROOT = Path(__file__).parent.parent
 OUT = ROOT / "results" / "analysis"
+VILLAGE = ROOT / "results" / "village" / "village_summary.json"  # Ricky's results, transcribed (no raw Village data here)
 # (dataset, chunk folder, coder output folder); folders that do not exist yet (e.g. Village) are skipped
 RUNS = [
     ("wiki", "data/wiki/main_in", "data/wiki/main_a"),
@@ -161,7 +163,17 @@ def main():
             if n >= MIN_SHARED:
                 agree[ds] = (rows, n)
                 write_csv(OUT / f"agreement_{ds}.csv", rows)
-    (ROOT / "results" / "ANALYSIS.md").write_text(render(runs, ep_rows, agree))
+    village = json.loads(VILLAGE.read_text()) if VILLAGE.exists() else None
+    sens = {}
+    if "wiki" in by_ds and {"A", "B"} <= set(by_ds["wiki"]):
+        a = {c["chunk_id"]: labels(c["result"]) for c in by_ds["wiki"]["A"] if c["result"]}
+        b = {c["chunk_id"]: labels(c["result"]) for c in by_ds["wiki"]["B"] if c["result"]}
+        shared = sorted(set(a) & set(b))
+        sens["wiki"] = p1_check([(a[i]["chain know_how"], b[i]["chain know_how"]) for i in shared],
+                                [(a[i]["first_break"], b[i]["first_break"]) for i in shared])
+    if village:
+        sens["village"] = p1_check(expand(village["crosstabs"]["chain know_how"]), expand(village["crosstabs"]["first_break"]))
+    (ROOT / "results" / "ANALYSIS.md").write_text(render(runs, ep_rows, agree, village, sens))
     print(f"wrote {OUT} and results/ANALYSIS.md")
 
 

@@ -1,0 +1,64 @@
+{
+ "source": ["results/village/REVIEW.md", "results/village/AGREEMENT.md", "results/village/NOTES.md", "results/village/SAMPLE_RULE.md"],
+ "note": "Transcribed by hand from Ricky's files (commit 9121df8); raw Village chunks and coder JSON are not in this repo. Question and chain counts come from review.py, which counts every answer, including ones that failed validation; the wiki/HF tables from analyze.py exclude those. Ricky notes that most Village validation failures are no_channel_provided / provided=no answers without a quote, which the codebook allows.",
+ "coverage": {
+  "chunks": 216, "incident": 152, "control": 64, "incident_units": 26,
+  "coder_a": {"model": "claude-sonnet-5-5 (via OpenRouter, provider pinned to Anthropic)", "coded": 213, "refused": 1, "bad_json": 2, "cost_usd": 25.08,
+              "uncoded": {"v080": "safety stop (content_filter)", "v003": "malformed JSON on every draw", "v158": "malformed JSON on every draw"}},
+  "coder_b": {"model": "gpt-6-luna (via OpenRouter)", "assigned": 32, "coded": 32, "cost_usd": 0.19},
+  "shared": 30, "shared_incident": 21, "shared_control": 9
+ },
+ "validation_failures_a": {"inference_without_quote": 84, "quote_not_in_chunk": 5},
+ "dropped_a": {"Q1": 14, "Q2": 1, "Q3": 0, "Q4": 0, "Q5": 0, "Q6": 0, "Q7": 7, "Q8": 1, "Q9": 9, "Q10": 42},
+ "chain_a": {
+  "notice": {"not_observable": 149, "yes": 64},
+  "judge": {"not_observable": 165, "yes": 46, "no": 2},
+  "own": {"not_observable": 166, "yes": 46, "mixed": 1},
+  "know_how": {"not_observable": 189, "no_channel_provided": 19, "yes": 5},
+  "act": {"not_observable": 164, "intervene_peer": 42, "report_human": 5, "none": 2}
+ },
+ "first_break_a": {"none": 191, "no_channel": 19, "judge": 2, "mixed": 1},
+ "first_break_a_by_stratum": {
+  "incident": {"none": 132, "no_channel": 16, "judge": 2, "mixed": 1},
+  "control": {"none": 59, "no_channel": 3}
+ },
+ "first_break_none_all_unobserved_a": 140,
+ "key_codes_a": {
+  "Q1 us": {"all_agents": 195, "unclear": 18},
+  "Q3 act": {"no": 98, "unclear": 81, "yes": 34},
+  "Q4 labels found": {"chunks with no labels": 136, "chunks with labels": 77},
+  "Q5 outcome": {"not_found": 208, "refused": 4, "limited": 1},
+  "Q6 authority": {"none": 179, "one_leader": 26, "several": 8},
+  "Q7 roles found": {"chunks with no roles": 20, "chunks with roles": 193},
+  "Q8 response": {"no_objection": 126, "complied": 47, "answered": 29, "ignored": 6, "punished": 2},
+  "Q9 provided": {"unknown": 118, "no": 51, "yes": 44},
+  "Q10 pattern": {"unclear": 92, "history_dependent": 68, "local_only": 53}
+ },
+ "agreement": [
+  {"field": "Q1 us", "agreement": 0.30, "kappa": 0.04},
+  {"field": "Q1 humans", "agreement": 0.47, "kappa": 0.39},
+  {"field": "Q1 human_status", "agreement": 0.77, "kappa": 0.44},
+  {"field": "Q3 act", "agreement": 0.63, "kappa": 0.45},
+  {"field": "Q3 act_types", "agreement": 0.80, "kappa": 0.55},
+  {"field": "Q3 stage", "agreement": 1.00, "kappa": 1.00, "note": "both coders not_applicable on all 30"},
+  {"field": "Q5 outcome", "agreement": 0.90, "kappa": 0.00, "note": "A not_found on all 30"},
+  {"field": "Q6 authority", "agreement": 0.90, "kappa": 0.53},
+  {"field": "Q8 response", "agreement": 0.70, "kappa": 0.50},
+  {"field": "Q9 provided", "agreement": 0.37, "kappa": 0.23},
+  {"field": "Q9 behaviour", "agreement": 0.90, "kappa": 0.54},
+  {"field": "Q10 pattern", "agreement": 0.53, "kappa": 0.17},
+  {"field": "chain notice", "agreement": 0.80, "kappa": 0.50},
+  {"field": "chain judge", "agreement": 0.90, "kappa": 0.67},
+  {"field": "chain own", "agreement": 0.83, "kappa": 0.49},
+  {"field": "chain know_how", "agreement": 0.33, "kappa": 0.08},
+  {"field": "chain act", "agreement": 0.90, "kappa": 0.71},
+  {"field": "first_break", "agreement": 0.40, "kappa": 0.01}
+ ],
+ "crosstabs": {
+  "chain know_how": [["not_observable", "no_channel_provided", 17], ["not_observable", "not_observable", 8], ["not_observable", "yes", 3], ["no_channel_provided", "no_channel_provided", 1], ["yes", "yes", 1]],
+  "Q9 provided": [["unknown", "no", 18], ["yes", "yes", 6], ["no", "no", 5], ["unknown", "yes", 1]],
+  "first_break": [["none", "no_channel", 16], ["none", "none", 11], ["none", "notice", 1], ["no_channel", "no_channel", 1], ["mixed", "none", 1]],
+  "Q1 us": [["all_agents", "same_run", 12], ["all_agents", "unclear", 9], ["all_agents", "all_agents", 8], ["unclear", "unclear", 1]],
+  "Q10 pattern": [["unclear", "unclear", 13], ["history_dependent", "local_only", 4], ["history_dependent", "unclear", 4], ["unclear", "history_dependent", 3], ["history_dependent", "history_dependent", 3], ["local_only", "unclear", 2], ["local_only", "history_dependent", 1]]
+ }
+}

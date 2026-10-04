@@ -15,3 +15,15 @@ def test_first_break_rules():
     assert first_break(base | {"know_how": "no_channel_provided"}) == "no_channel"
     assert first_break(base | {"act": "none"}) == "act"
     assert first_break(base | {"notice": "mixed", "judge": "no"}) == "mixed"
+
+
+def test_sensitivity_p1_and_p3():
+    from sensitivity import expand, p1_check, p3_first_break
+    kh = expand([["not_observable", "no_channel_provided", 3], ["yes", "yes", 1]])
+    fb = expand([["none", "no_channel", 3], ["judge", "judge", 1]])
+    out = p1_check(kh, fb)
+    assert out["chain know_how"][0][1] == 0.25 and out["chain know_how"][1][1] == 1.0
+    assert out["first_break"][1][1] == 1.0
+    unseen = dict.fromkeys(["notice", "judge", "own", "know_how", "act"], "not_observable")
+    assert p3_first_break("none", unseen) == "unobserved"
+    assert p3_first_break("none", unseen | {"notice": "yes"}) == "none"
