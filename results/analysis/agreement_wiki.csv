@@ -1,0 +1,19 @@
+field,n,agreement,kappa,values_seen,flag
+Q1 us,37,0.919,0.842,3,
+Q1 humans,37,1.0,1.0,1,
+Q1 human_status,37,1.0,1.0,1,
+Q3 act,42,0.905,0.828,3,
+Q3 act_types,42,0.595,0.461,7,UNRELIABLE
+Q3 stage,42,0.786,0.572,3,UNRELIABLE
+Q5 outcome,42,0.976,0.952,2,
+Q6 authority,44,1.0,1.0,1,
+Q8 response,44,0.932,0.0,4,UNRELIABLE
+Q9 provided,44,0.864,0.0,2,UNRELIABLE
+Q9 behaviour,44,0.955,0.0,2,UNRELIABLE
+Q10 pattern,41,0.683,0.315,3,UNRELIABLE
+chain notice,38,0.895,0.788,3,
+chain judge,44,0.955,0.0,2,UNRELIABLE
+chain own,44,1.0,1.0,1,
+chain know_how,38,1.0,1.0,1,
+chain act,44,1.0,1.0,1,
+first_break,44,0.841,0.094,3,UNRELIABLE
