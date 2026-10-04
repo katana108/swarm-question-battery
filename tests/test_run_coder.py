@@ -93,3 +93,11 @@ def test_load_env_does_not_override(tmp_path, monkeypatch):
     import os
     assert os.environ["TEST_KEY_A"] == "already" and os.environ["TEST_KEY_B"] == "quoted"
     monkeypatch.delenv("TEST_KEY_B")
+
+
+def test_client_headers_only_when_workspace_set(monkeypatch):
+    from run_coder import client_headers
+    monkeypatch.delenv("ANTHROPIC_WORKSPACE_ID", raising=False)
+    assert client_headers() == {}
+    monkeypatch.setenv("ANTHROPIC_WORKSPACE_ID", "wrkspc_x")
+    assert client_headers() == {"anthropic-workspace-id": "wrkspc_x"}

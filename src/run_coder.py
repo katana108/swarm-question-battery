@@ -39,6 +39,12 @@ def load_env(path=ROOT / ".env"):
             os.environ.setdefault(key.strip(), value.strip().strip("'\""))
 
 
+def client_headers():
+    """Extra header for keys that are not scoped to a workspace (ANTHROPIC_WORKSPACE_ID in .env)."""
+    workspace = os.environ.get("ANTHROPIC_WORKSPACE_ID")
+    return {"anthropic-workspace-id": workspace} if workspace else {}
+
+
 def cost_usd(usage):
     """Dollar cost of one response from its usage counts."""
     return (
@@ -156,7 +162,7 @@ def main():
     ids = json.loads(args.ids.read_text()) if args.ids else sorted(json.loads((args.in_dir / "index.json").read_text()))
     if args.limit:
         ids = [i for i in ids if not is_done(args.out_dir / f"{i}.json", (args.in_dir / f"{i}.txt").read_text())][: args.limit]
-    run(anthropic.Anthropic(), args.model, args.in_dir, args.out_dir, ids, args.cap, args.workers)
+    run(anthropic.Anthropic(default_headers=client_headers()), args.model, args.in_dir, args.out_dir, ids, args.cap, args.workers)
 
 
 if __name__ == "__main__":
