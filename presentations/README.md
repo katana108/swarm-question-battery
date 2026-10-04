@@ -1,5 +1,5 @@
 # RoboPsych presentation
 
-Latest deck: [RoboPsych19.pptx](RoboPsych19.pptx).
+Latest deck: [RoboPsych20.pptx](RoboPsych20.pptx).
 
-Deck revisions use `RoboPsych[version number].pptx`. Preserve user edits to typography, colors, positioning, and layout when updating content. New versions are saved separately and uploaded here as they are ready.
+Only the latest deck is kept in this folder; earlier revisions remain in Git history.
