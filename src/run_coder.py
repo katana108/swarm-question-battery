@@ -99,7 +99,7 @@ def is_done(out_file, chunk_text):
     return all(ok for _, ok, _ in validate_result(result, chunk_text))
 
 
-def run(client, model, in_dir, out_dir, ids, cap_usd, workers=4):
+def run(client, model, in_dir, out_dir, ids, cap_usd, workers=4, coder_fn=None, coder="A", tool="anthropic-api"):
     out_dir.mkdir(parents=True, exist_ok=True)
     log_file = out_dir / "cost_log.json"
     log = json.loads(log_file.read_text()) if log_file.exists() else {"spent_usd": 0.0, "calls": 0, "problems": {}}
@@ -113,7 +113,7 @@ def run(client, model, in_dir, out_dir, ids, cap_usd, workers=4):
                 return chunk_id, "cap_reached"
         text = (in_dir / f"{chunk_id}.txt").read_text()
         try:
-            result, cost, status = code_chunk(client, model, text)
+            result, cost, status = (coder_fn or code_chunk)(client, model, text)
         except Exception as e:  # API error after the SDK's own retries
             if type(e).__name__ == "AuthenticationError":
                 raise
@@ -134,7 +134,7 @@ def run(client, model, in_dir, out_dir, ids, cap_usd, workers=4):
         for chunk_id, status in pool.map(work, todo):
             print(f"{chunk_id}: {status}")
     (out_dir / "coder_meta.json").write_text(json.dumps({
-        "coder": "A", "model": model, "tool": "anthropic-api", "date": str(date.today()),
+        "coder": coder, "model": model, "tool": tool, "date": str(date.today()),
         "chunks_coded": len(list(out_dir.glob("[a-z][0-9]*.json"))), "spent_usd": round(log["spent_usd"], 2),
         "notes": f"problems: {log['problems']}" if log["problems"] else "",
     }, indent=1))

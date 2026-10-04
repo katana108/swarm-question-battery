@@ -2,3 +2,4 @@ pyyaml
 pypdf
 pytest
 anthropic
+openai
