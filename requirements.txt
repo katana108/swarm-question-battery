@@ -1,3 +1,4 @@
 pyyaml
 pypdf
 pytest
+anthropic
