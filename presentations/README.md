@@ -1,5 +1,5 @@
 # RoboPsych presentation
 
-Latest deck: [RoboPsych22.pptx](RoboPsych22.pptx).
+Latest deck: [RoboPsych24.pptx](RoboPsych24.pptx).
 
 Only the latest deck is kept in this folder; earlier revisions remain in Git history.
