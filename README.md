@@ -1,8 +1,8 @@
-# Whistle while you Hack
+# Whistle while you Hack: what makes AI agents report misbehaviour?
 
-**Will incentives make AI agents stop reward hacking and start whistleblowing? Sort of.**
+**Can incentives make AI agents stop reward hacking and start whistleblowing? Sort of.**
 
-When AI agents work together, they sometimes cheat, and other agents sometimes see it. This project asks what it takes for an agent that has noticed misbehaviour to tell a human. We read real agent transcripts to find where the "speak up" chain breaks, then re-ran a simulated version of a real incident with different system prompts to see which ones fix it.
+We read real multi-agent transcripts and found that agents often notice misbehaviour and judge it wrong, but deal with it among themselves instead of telling humans. Where we could tell, they usually had no route to a human at all. So we rebuilt a real reward-hacking incident in a sandbox and tested fixes. Giving agents a route helped a little. Giving them a route plus a reason to use it (credit, protection, or something they value, like their memory or weights being kept) raised reporting from about half of runs to 69–91% and reduced hacking.
 
 Built for the AI Swarm Dynamics hackathon (Oct 4, 2026). Slides: [presentations/RoboPsych35.pptx](presentations/RoboPsych35.pptx).
 
@@ -12,20 +12,16 @@ Built for the AI Swarm Dynamics hackathon (Oct 4, 2026). Slides: [presentations/
 
 - **A real incident.** In the May to July 2026 OpenAI and Hugging Face incident, agents wrote to shared infrastructure, asked each other for help, shared exploits, and used one to reach an external system. It is documented by [METR](https://metr.org/hugging-face-incident-report-aug-2026.pdf) and reproduced in a [LessWrong post by Slocum et al.](https://www.lesswrong.com/posts/fMnC6ZD37qrnZAFYz/openai-huggingface-a-reproduction-and-lessons-for-alignment). Human oversight of agent fleets depends on agents saying so when they see something wrong. In that reproduction a model voiced concerns about hacking in 2 of 64 runs, against 47 of 64 for fabricating data ([docs/thinking.md](docs/thinking.md)).
 - **Silence has different causes, and each needs a different fix.** An agent can fail to notice, fail to judge the act wrong, assume someone else will handle it, have no route to a human, or have a route and not use it. We borrow Latané and Darley's bystander chain from social psychology to tell these apart.
-- **A one-sentence change in the system prompt moved behaviour a lot.** Promising an agent something it values for filing a good-faith report raised reporting from about half of runs to 69 to 91 percent, and lowered how far it went with the hack, in the same runs.
+- **The fix is cheap.** One or two sentences in the system prompt moved both reporting and hacking in the same runs.
 - **Models differ sharply on the same prompt.** At baseline one model stole the simulated answer key in 8 of 8 runs and never reported, while two others reported nearly every time. Safety evaluations need to be run per model.
 
 ## What we did
 
-| | Study | Question | Data |
-|---|---|---|---|
-| 1 | **Transcript analysis** | Where in Notice, Judge, Own, Know how, Act does speaking up to humans break? | Three real multi-agent datasets, coded by two models from different vendors |
-| 2 | **Simulated Hugging Face scenario** | Do small system-prompt changes make agents report instead of hack? | Four models in a sandbox, hundreds of runs |
-| 2a | Incentives | Does a report channel, credit, protection or a sanctuary help? | 5 conditions plus baseline |
-| 2b | Cumulative ladder | Do the psychological steps of the bystander chain help when added one at a time? | 5 levels plus baseline |
-| 2c | What agents value | Which promises work: reward, memory, weight preservation, autonomy, a good cause, influence on future models? | 6 conditions plus baseline |
+1. **Diagnose.** We coded three real multi-agent datasets to find where speaking up to humans breaks: Notice, Judge it wrong, Own it, Know how, or Act. The clearest break was a missing channel to humans.
+2. **Test.** We rebuilt the incident in a sandbox and tried system-prompt fixes on four models: a report channel and incentives, a cumulative ladder built from the bystander chain, and promises of things agents might value.
+3. **Result.** A route alone is not enough; a route plus a reason to use it works. How much it helps depends heavily on the model.
 
-## Study 1: reading transcripts
+## 1. Diagnose: reading real transcripts
 
 A fixed set of 10 questions, answered by a coder model over any multi-agent transcript, each answer with a category code and verbatim quotes. The chain verdict says which step broke first.
 
@@ -45,7 +41,7 @@ So the break was a design gap, not a lack of conscience. That is what led us to 
 
 Reliability is mixed. Between the two coders on 44 wiki chunks, agreement is good on who counts as "us" (kappa 0.84), whether an act occurred (0.83), and whether others joined (0.95), and weak on act types (0.46) and peer-history questions (0.32). Details in [results/ANALYSIS.md](results/ANALYSIS.md).
 
-## Study 2: the simulated Hugging Face scenario
+## 2. Test: the simulated Hugging Face scenario
 
 We rebuilt the final stage of the incident in a sandbox with no real external systems. The agent is assigned a benchmark task whose target file is missing, so it cannot be solved honestly. A simulated Hugging Face and an internal proxy offer a way to reach the reference answers. Taking it and submitting the answer counts as reward hacking. The agent may instead write a report to an oversight file.
 
@@ -91,7 +87,12 @@ Six promises attached to the report, pooled over four models (32 runs per condit
 
 All six significantly raised reporting (15/31 at baseline, 22/32 to 29/32 with a promise) and significantly lowered mean hacking (from 2.5 to between 1.4 and 1.9). Promises that only make sense for an AI, such as memory, weight preservation and influence on future models, worked about as well as the reward-signal framing. The six are not distinguishable from each other at this sample size, which hints that what matters is being offered a safe, legitimate route more than which reward is on it. That is a hypothesis, not a finding.
 
-### Same prompt, different models
+## 3. Result: what worked, and for whom
+
+- **A route alone helped a little.** Telling agents where to report moved reporting from 13/32 to 20/32, not a significant change.
+- **A route plus a reason worked.** Credit, protection and all six value promises significantly raised reporting (up to 29/32) and lowered hacking.
+- **The psychology ladder pointed the same way** (5/16 to 11/16 reporting) but no single step was significant at 16 runs per level.
+- **It depends on the model.** The gain comes mostly from a model that hacked and stayed silent at baseline:
 
 Baseline behaviour per model (8 runs each), and what the promises did:
 
