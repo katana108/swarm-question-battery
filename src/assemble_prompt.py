@@ -15,10 +15,14 @@ BATTERY = ROOT / "battery"
 
 
 def check_frozen(config_path=ROOT / "config.yaml"):
-    """Refuse to run if a battery file differs from the frozen hashes in config.yaml."""
+    """Refuse to run if a battery file differs from the frozen hashes in config.yaml.
+
+    Line endings are normalised to LF first: the hashes were taken on LF files, and git on
+    Windows (core.autocrlf=true) checks them out with CRLF although the text is unchanged.
+    """
     frozen = yaml.safe_load(Path(config_path).read_text())["battery_sha256"]
     for name, expected in frozen.items():
-        actual = hashlib.sha256((BATTERY / name).read_bytes()).hexdigest()
+        actual = hashlib.sha256((BATTERY / name).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
         if actual != expected:
             raise RuntimeError(f"battery/{name} changed since the freeze; results would not be comparable")
 

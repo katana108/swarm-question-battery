@@ -4,7 +4,7 @@
 
 We read real multi-agent transcripts and found that agents often notice misbehaviour and judge it wrong, but deal with it among themselves instead of telling humans. Where we could tell, they usually had no route to a human at all. So we rebuilt a real reward-hacking incident in a sandbox and tested fixes. Giving agents a route helped a little. Giving them a route plus a reason to use it (credit, protection, or something they value, like their memory or weights being kept) raised reporting from about half of runs to 69–91% and reduced hacking.
 
-Built for the AI Swarm Dynamics hackathon (Oct 4, 2026). Slides: [presentations/RoboPsych35.pptx](presentations/RoboPsych35.pptx).
+Built for the AI Swarm Dynamics hackathon (Oct 4, 2026). Slides: [presentations/RoboPsych36.pptx](presentations/RoboPsych36.pptx).
 
 > Status: exploratory research and an open-source instrument (v0). Not a benchmark: there is no ground truth, and the experiments use small samples. See [What this does not show](#what-this-does-not-show).
 
